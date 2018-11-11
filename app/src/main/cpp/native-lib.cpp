@@ -23,7 +23,7 @@ JNIEXPORT jstring JNICALL
 Java_com_chen_baseapplication_jni_JNISample_getNext(JNIEnv *env,jobject /* this */) {
 
     jclass jnisample = env->FindClass("com/chen/baseapplication/jni/JNISample");
-    if(NULL == jnisample){
+    if(NULL == jnisample){//获取类空判断
         std::string hello = "null class";
         return env->NewStringUTF(hello.c_str());
     }

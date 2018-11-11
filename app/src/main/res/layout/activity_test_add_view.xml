@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<com.chen.baseapplication.widget.PartyRoomLayout
+    android:id="@+id/ly_partroom"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
+
+</com.chen.baseapplication.widget.PartyRoomLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary">
+
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="add"
+        android:onClick="click"/>
+    <Button
+        android:id="@+id/btn_rm"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="romove"
+        android:onClick="click"/>
+    </LinearLayout>
+</FrameLayout>

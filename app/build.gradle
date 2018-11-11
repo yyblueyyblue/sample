@@ -1,0 +1,259 @@
+//说明module的类型，com.android.application为程序，com.android.library为库
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 25 ////编译的SDK版本
+    buildToolsVersion "25.0.0"//"//编译的Tools版本
+    defaultConfig {//默认配置
+        applicationId "com.chen.baseapplication"//应用程序的包名
+        minSdkVersion 14//支持的最低版本
+        targetSdkVersion 25//支持的目标版本
+        versionCode 1 //版本号
+        versionName "1.0"  //版本名
+
+        // 不声明ndk标签,项目默认会创建一个libapp.so的文件
+//        ndk {
+//            // 声明创建so库的文件名,会自动添加lib前缀, 添加了前缀,不会自动添加
+//            moduleName "JNISample"
+//
+//            //声明启用Android日志, 在c/c++的源文件中使用的#include <android/log.h> 日志将得到输出
+//            ldLibs "log"
+//            // 声明创建指定cpu架构的so库, 不声明的话, 默认(gradle 1.5.0)会生成4中架构 多一种mips架构
+//            // 具体cpu架构的区别请参考:
+//            // for detailed abiFilter descriptions, refer to "Supported ABIs" @
+//            // https://developer.android.com/ndk/guides/abis.html#sa
+//            abiFilters "armeabi", "armeabi-v7a", "x86"
+//
+//            stl "stlport_static"
+//        }
+
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+//                abiFilters "armeabi-v7a"
+            }
+        }
+    }
+
+    /**
+     * （做到一次生成多个不同ui的apk）
+     * 一次生成过个渠道发布的不同UI的apk
+     */
+    buildTypes {//build类型
+        release {//发布
+            minifyEnabled true//混淆开启
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+//指定混淆规则文件
+//            signingConfig signingConfigs.release//设置签名信息
+            /**
+             * 创建build变量是很有用的，
+             * 比如说你有这样的需求：debug版打印Log,release版不打印Log,怎么实现呢？
+             * 这里主要使用resValue这个函数创建了一个build变量，
+             * 这个变量会被写到在BuildConfig类中，如下代码所示：
+             * public final class BuildConfig {public static final boolean DEBUG = Boolean.parseBoolean("true");}使用：
+             if(BuildConfig.DEBUG){Log.d("hello","debug");}* 这样就实现了debug版本打印Log,而release版本不打印Log。
+             */
+//            resValue("string","DEBUG","false")
+        }
+        debug {//调试
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.release
+//            resValue("string","DEBUG","true")
+        }
+
+        /**
+         * 自定义build type
+         * android studio中默认的build type 有两种：debug和release,
+         * 想像3.1展示的那样，如果这些默认的build type满足不了项目的需求的时候，
+         * 你可以自定一个build type,所有你需要做的就是新建一个type,想下面这样：
+         */
+//        staging {
+//             applicationIdSuffix ".staging"
+//             versionNameSuffix "-staging"
+//             buildConfigField "String", "API_URL","http://staging.example.com/api"
+//            debuggable = false
+//        }
+    }
+
+    sourceSets {//目录指向配置 sourceSets是build.gradle中的一个script block，它的功能主要是配置工程下各个资源的路径信息
+//        main{
+//            manifest.srcFile 'AndroidManifest.xml'//指定AndroidManifest文件
+//            java.srcDirs = ['src']//指定source目录
+//            resources.srcDirs = ['src']//指定source目录
+//            aidl.srcDirs = ['src']//指定source目录
+//            renderscript.srcDirs = ['src']//指定source目录
+//            res.srcDirs = ['res']//指定资源目录
+//            assets.srcDirs = ['assets']//指定assets目录
+//            jniLibs.srcDirs = ['libs']//指定lib库目录
+
+//            // 1. 配置在根目录libs下可以加载第三方so库, (最好不要创建jniLibs, 在众多的开源库中可能会引起冲突,还没发现)
+//            // 2. 运行时会自动将libs目录下的so库拷贝到指定目录
+//            // 3. 如果自己创建的so不需要重新编译,可以将(app/build/intermediates/transforms)生成的so拷贝到这个目录
+//            jniLibs.srcDirs = ['lib']
+//            // 如果是单个文件夹 可以直接这样如下配置
+//            // jniLibs.srcDir 'libs'
+//        }
+
+//        baiduStaging {
+//            manifest.srcFile('/src/main/MineManifest.xml')
+//            java.srcDir('/src/main/helo')
+//            res.srcDir('/src/baiduStaging/haha')
+//            aidl.srcDir('/src/main/hello')
+//        }
+//        wandoujiaStaging {
+//            manifest.srcFile('/src/main/MineManifest.xml')
+//            java.srcDir('/src/main/helo')
+//            res.srcDir('/src/wandoujiaStaging/haha')
+//            aidl.srcDir('/src/main/hello')
+//        }
+
+        debug.setRoot('build-types/debug')//指定debug模式的路径
+        release.setRoot('build-types/release')//指定release模式的路径
+    }
+
+    //大家注意flavor和build type组合的方式：flavors后面跟build type,builed type首字母大写
+//    productFlavors {
+//        wandoujia {
+//            }
+//        baidu {
+//            }
+//        productFlavors.all {
+//            flavor->flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+//            }
+//        }
+
+    //signingConfigs {//签名配置
+//    release {//发布版签名配置
+//        storeFile file("fk.keystore")//密钥文件路径
+//        storePassword "123"//密钥文件密码
+//        keyAlias "fk"//key别名
+//        keyPassword "123"//key密码
+//    }
+//    debug {//debug版签名配置
+//        storeFile file("fk.keystore")
+//        storePassword "123"
+//        keyAlias "fk"
+//        keyPassword "123"
+//    }
+//}
+
+//    packagingOptions {
+//        exclude 'META-INF/ASL2.0'
+//        exclude 'META-INF/LICENSE'
+//        exclude 'META-INF/NOTICE'
+//        exclude 'META-INF/MANIFEST.MF'
+//    }
+
+//    lintOptions {
+//        abortOnError false//lint时候终止错误上报,防止编译的时候莫名的失败
+//    }
+
+    //打包-渠道
+//    productFlavors {
+//        hsq{}
+//        hsq_dx{}
+//        hsq_wx{}
+//        baidu{}
+//        yingyongbao{}
+//        ppzhushou{}
+//        anzhi{}
+//        zhushou360{}
+//        huawei{}
+//        lenovomm{}
+//        wandoujia{}
+//        mumayi{}
+//        meizu{}
+//        youyi{}
+//        sougou{}
+//    }
+
+    /**
+     * 替换AndroidManifest.xml的BaiduMobAd_CHANNEL_VALUE字符串为渠道名称格式
+     * 打包-防渠道代码重复处理
+     * <meta-data
+     *    android:name="BaiduMobAd_CHANNEL"
+     *    android:value="${BaiduMobAd_CHANNEL_VALUE}" />
+     */
+//    productFlavors.all { flavor ->
+//        flavor.manifestPlaceholders = [ UMENG_CHANNEL_VALUE:name ]
+//    }
+
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
+    // 新增的jni编译部分
+    productFlavors {
+        arm7 {
+            ndk {
+                abiFilter 'armeabi-v7a'
+            }
+        }
+//        arm8 {
+//            ndk {
+//                abiFilters 'arm64-v8a'
+//            }
+//        }
+        arm {
+            ndk {
+                abiFilter 'armeabi'
+            }
+        }
+//        x86 {
+//            ndk {
+//                abiFilter 'x86'
+//            }
+//        }
+//        x86_64 {
+//            ndk {
+//                abiFilter 'x86_64'
+//            }
+//        }
+//        mips {
+//            ndk {
+//                abiFilters 'mips', 'mips64'
+//            }
+//        }
+//        universal {
+//            ndk {
+//                abiFilters 'mips', 'mips64', 'x86', 'x86_64'
+//            }
+//        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])  //编译lib目录下的.jar文件
+    //compile project(':Easylink')//编译附加的项目
+    compile 'com.android.support:appcompat-v7:25.0.1' //编译来自Jcenter的第三方开源库
+    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+//    compile(name:'pulltorefresh', ext:'aar')//引用aar文件
+}
+repositories {
+    mavenCentral()
+
+    /**
+     * aar与jar的区别
+     * .jar：只包含了class文件与清单文件，不包含资源文件，如图片等所有res中的文件。
+     * .aar：包含所有资源，class以及res资源文件全部包含
+     * .aar：有两种方式，分别为本地加载以及网络加载，
+     * 由于网络加载涉及到发布到mavenCentral托管的问题这里不做讨论；
+     * 在这里给大家说一种本地加载的方式，简单快捷。
+     * 这里演示的aar文件为：”pulltorefresh.aar“
+     */
+//    flatDir {
+//        dirs 'libs'
+//    }
+}
+
+apply plugin: 'kotlin-android-extensions'

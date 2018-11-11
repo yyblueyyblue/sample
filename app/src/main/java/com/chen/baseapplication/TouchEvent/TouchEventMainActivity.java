@@ -8,6 +8,10 @@ import android.widget.TextView;
 
 import com.chen.baseapplication.R;
 
+/**
+*演示事件的传递和拦截
+*/
+
 public class TouchEventMainActivity extends Activity {
 
     MyFrameLayout fly;

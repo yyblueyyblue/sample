@@ -45,8 +45,8 @@ public class TouchEventMainActivity extends Activity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean relust = true;
-//        fly.scrollTo((int)event.getX(),(int)event.getY());
-//        fly.scrollBy((int)event.getX(),(int)event.getY());
+        fly.scrollTo((int)event.getX(),(int)event.getY());
+        fly.scrollBy((int)event.getX(),(int)event.getY());
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("test", "【老板】完成任务：" + TouchEventUtils.actionToString(event.getAction())

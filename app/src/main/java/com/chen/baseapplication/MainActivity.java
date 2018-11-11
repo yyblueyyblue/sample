@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mListData = new ArrayList<String>();
         mListData.add("animation");
         mListData.add("TouchEvent");
-        mListData.add("TagView");
+        mListData.add("TagViews");
         mListData.add("Camera");
         mListData.add("OpenGL");
         mListData.add("HandlerThread");
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mListData.add("JNI");
         mListData.add("Maxtri");
         mListData.add("Canvas");
-        mListData.add("Test");
+        mListData.add("Tests");
 
         OneKotlinClass kt = new OneKotlinClass("oneKotlinClass");
         mListData.add(kt.getClassName("oneKotlinClass"));
